@@ -2,20 +2,13 @@
 from gevent.wsgi import WSGIServer
 from webob import Request, Response
 from webob.exc import *
-
-from pprint import pprint
-from traceback import format_exc
 from time import strftime, localtime
 from os import stat
 import sqlite3
 import re
-
-from clusto.scripthelpers import init_script
-import clusto
-import simplejson as json
-
+import json
 from jinja2 import Environment, FileSystemLoader
-env = Environment(loader=FileSystemLoader('/home/synack/src/clusto-viz/templates'))
+env = Environment(loader=FileSystemLoader('/Users/mike/tmp/clusto-viz/templates'))
 
 class Application(object):
     def __init__(self, urls):
@@ -63,7 +56,7 @@ class PoolViewHandler(object):
     def get(self, request, pool):
         template = env.get_template('pool_count.html')
 
-        conn = sqlite3.connect('/home/synack/src/clusto-viz/pools.db')
+        conn = sqlite3.connect('/Users/mike/tmp/clusto-viz/pools.db')
         c = conn.cursor()
         c.execute('SELECT * FROM counts WHERE name=? ORDER BY ts ASC', (pool,))
         counts = c.fetchall()
@@ -85,5 +78,4 @@ def main():
     server.serve_forever()
 
 if __name__ == '__main__':
-    init_script()
     main()
