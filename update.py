@@ -42,7 +42,7 @@ class Update(script_helper.Script):
         conn.commit()
         c.close()
    
-    def run(self):
+    def run(self, args):
         self.update_racks()
         self.update_count()
 
