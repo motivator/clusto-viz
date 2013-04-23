@@ -14,12 +14,16 @@ class Update(script_helper.Script):
         result = {}
     
         for datacenter in clusto.get_entities(clusto_types=['datacenter']):
+            self.debug(datacenter)
             for cage in datacenter.contents(clusto_types=['cage']):
+                self.debug(cage)
                 for rack in cage.contents(clusto_types=['rack']):
+                    self.debug(rack)
                     devices = []
                     for ru in range(45, 0, -1):
                         device = rack.get_device_in(ru)
                         if device:
+                            self.debug(device)
                             devices.append((ru, device.name, device.type, ' '.join([x.name for x in device.parents(clusto_types=['pool'])])))
                         else:
                             devices.append((ru, None, None, ''))
@@ -30,7 +34,7 @@ class Update(script_helper.Script):
                 result[datacenter.name].sort(key=lambda x: x[0])
     
         result = json.dumps(result)
-        file('/home/synack/src/clusto-viz/result.json', 'w').write(result)
+        file('/Users/mike/tmp/clusto-viz/result.json', 'w').write(result)
     
     def update_count(self):
         conn = sqlite3.connect('/Users/mike/tmp/clusto-viz/pools.db')
